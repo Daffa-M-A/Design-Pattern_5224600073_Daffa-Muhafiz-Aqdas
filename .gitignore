@@ -39,3 +39,15 @@
 
 # debug information files
 *.dwo
+*.sln
+*.vcxproj
+.vs/Tugas Design Pattern/v17/Browse.VC.db
+.vs/Tugas Design Pattern/v17/Browse.VC.db-shm
+.vs/Tugas Design Pattern/v17/Browse.VC.db-wal
+.vs/Tugas Design Pattern/v17/Browse.VC.opendb
+.vs/Tugas Design Pattern/v17/DocumentLayout.backup.json
+.vs/Tugas Design Pattern/v17/DocumentLayout.json
+Tugas Design Pattern.vcxproj.filters
+Tugas Design Pattern.vcxproj.user
+.vs/Tugas Design Pattern/FileContentIndex/de8bed4d-fddd-431c-b51b-b5e7a41b3932.vsidx
+.vs/Tugas Design Pattern/v17/.suo
