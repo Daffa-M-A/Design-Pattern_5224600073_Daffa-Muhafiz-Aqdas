@@ -2,8 +2,11 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <memory>
 #include "RunSession.h"
 #include "ScoringSystem.h"
+#include "ShopSystem.h"
+#include "modifiers/IModifier.h"
 
 using namespace std;
 
@@ -13,7 +16,7 @@ vector<int> parseInput(const string& input) {
     stringstream ss(input);
     int num;
     while (ss >> num) {
-        indices.push_back(num - 1); // User input 1-based, array 0-based
+        indices.push_back(num - 1);
     }
     return indices;
 }
@@ -21,6 +24,10 @@ vector<int> parseInput(const string& input) {
 int main() {
     vector<int> targetScores = {300, 450, 600};
     ScoringSystem scorer;
+    ShopSystem shop;
+    
+    // Inventory/Koleksi Leaf milik pemain yang akan terus dibawa antar ronde
+    vector<unique_ptr<IModifier>> activeLeaves;
 
     cout << "===================================\n";
     cout << "      STONE SKIPPING: THE GAME     \n";
@@ -34,6 +41,15 @@ int main() {
         int currentScore = 0;
 
         cout << "\n>>> ROUND " << round << " STARTS! <<<\n";
+        
+        // Tampilkan Leaf apa saja yang sedang aktif
+        if (!activeLeaves.empty()) {
+            cout << "[Active Leaves]: ";
+            for (const auto& leaf : activeLeaves) {
+                cout << leaf->getName() << " | ";
+            }
+            cout << "\n";
+        }
 
         // Loop per ronde
         while (session.getPlaysLeft() > 0 && currentScore < target) {
@@ -48,7 +64,7 @@ int main() {
             cout << "Choose action (1 or 2): ";
             int action;
             cin >> action;
-            cin.ignore(); // Bersihkan buffer newline
+            cin.ignore();
 
             if (action == 1) {
                 cout << "Enter stone numbers to PLAY (separated by space): ";
@@ -58,7 +74,9 @@ int main() {
                 
                 if (indices.size() > 0 && indices.size() <= 3) {
                     vector<Stone> played = session.playStones(indices);
-                    int scoreGained = scorer.calculatePlayScore(played);
+                    
+                    // Hitung skor dengan menyertakan activeLeaves
+                    int scoreGained = scorer.calculatePlayScore(played, activeLeaves);
                     currentScore += scoreGained;
                     cout << "\n> You skipped stones and scored " << scoreGained << " points!\n";
                 } else {
@@ -86,7 +104,28 @@ int main() {
         // Cek kondisi menang/kalah per ronde
         if (currentScore >= target) {
             cout << "\n*** ROUND " << round << " CLEARED! ***\n";
-            // Disini nanti logika Shop akan masuk sebelum lanjut ronde berikutnya
+            
+            // Masuk Shop jika bukan ronde terakhir
+            if (round < 3) {
+                auto newLeaf = shop.openShop();
+                if (newLeaf) {
+                    
+                    // --- LOGIKA BARU: Batasan 1 Leaf ---
+                    if (!activeLeaves.empty()) {
+                        cout << "\n> You replaced [" << activeLeaves[0]->getName() 
+                             << "] with [" << newLeaf->getName() << "]!\n";
+                        activeLeaves.clear(); // Hapus Leaf yang lama
+                    } else {
+                        cout << "\n> You acquired: [" << newLeaf->getName() << "]!\n";
+                    }
+                    
+                    activeLeaves.push_back(move(newLeaf)); // Masukkan Leaf yang baru
+                    // -----------------------------------
+                    
+                } else {
+                    cout << "\n> You skipped the shop.\n";
+                }
+            }
         } else {
             cout << "\n*** GAME OVER! Target not reached. ***\n";
             return 0; // Menghentikan program jika kalah
