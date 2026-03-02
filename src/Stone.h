@@ -6,10 +6,9 @@ enum class RockType { IGNEOUS, SEDIMENTARY, METAMORPHIC };
 struct Stone {
     RockType type;
     int smoothness; 
-    float baseValue; // Sekarang jadi variabel agar bisa diubah Modifier
-    float friction;  // Sekarang jadi variabel agar bisa diubah Modifier
+    float baseValue; 
+    float friction; 
 
-    // Constructor untuk menetapkan nilai awal sesuai tipe
     Stone(RockType t, int s) : type(t), smoothness(s) {
         if (t == RockType::IGNEOUS) { baseValue = 3.0f; friction = 0.2f; }
         else if (t == RockType::SEDIMENTARY) { baseValue = 7.0f; friction = 0.1f; }

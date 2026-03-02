@@ -6,6 +6,5 @@
 
 class ScoringSystem {
 public:
-    // Sekarang fungsi ini menerima daftar Leaf yang sedang aktif
     int calculatePlayScore(const std::vector<Stone>& playedStones, const std::vector<std::unique_ptr<IModifier>>& activeLeaves);
 };

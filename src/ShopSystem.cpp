@@ -7,7 +7,6 @@ std::unique_ptr<IModifier> ShopSystem::openShop() {
     std::cout << "          LEAF SHOP (PICK 1)       \n";
     std::cout << "===================================\n";
     
-    // Tampilkan barang dagangan (memanfaatkan Factory untuk melihat deskripsi)
     auto item1 = ModifierFactory::createLeaf("Burning");
     auto item2 = ModifierFactory::createLeaf("Solidified");
     auto item3 = ModifierFactory::createLeaf("Floating");
@@ -26,6 +25,6 @@ std::unique_ptr<IModifier> ShopSystem::openShop() {
         case 1: return ModifierFactory::createLeaf("Burning");
         case 2: return ModifierFactory::createLeaf("Solidified");
         case 3: return ModifierFactory::createLeaf("Floating");
-        default: return nullptr; // Skip
+        default: return nullptr; 
     }
 }

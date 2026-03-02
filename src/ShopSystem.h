@@ -5,6 +5,5 @@
 
 class ShopSystem {
 public:
-    // Menampilkan toko dan mengembalikan Leaf yang dibeli (bisa null jika di-skip)
     std::unique_ptr<IModifier> openShop();
 };

@@ -16,12 +16,13 @@ void RunSession::generateCan() {
         int smooth = (std::rand() % 10) + 1; // 1-10
         can.push_back({rt, smooth});
     }
-    // Shuffle the can
-    std::random_shuffle(can.begin(), can.end());
+    
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(can.begin(), can.end(), g);
 }
 
 void RunSession::drawToHand() {
-    // Isi hand sampai 5 batu
     while (hand.size() < 5 && !can.empty()) {
         hand.push_back(can.back());
         can.pop_back();
@@ -49,7 +50,6 @@ std::vector<Stone> RunSession::playStones(const std::vector<int>& indices) {
     std::vector<Stone> played;
     if (indices.empty() || indices.size() > 3 || playsLeft <= 0) return played;
 
-    // Ambil batu dari belakang agar index tidak bergeser saat dihapus
     std::vector<int> sortedIndices = indices;
     std::sort(sortedIndices.rbegin(), sortedIndices.rend());
 

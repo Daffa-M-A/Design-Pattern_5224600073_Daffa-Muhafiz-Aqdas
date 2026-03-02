@@ -1,8 +1,7 @@
 #pragma once
 #include "IModifier.h"
-#include <cstdlib> // Untuk std::rand()
+#include <cstdlib> 
 
-// 1. Burning Leaf (Buff Igneous rock)
 class BurningLeaf : public IModifier {
 public:
     std::string getName() const override { return "Burning Leaf"; }
@@ -10,12 +9,11 @@ public:
     
     void modifyStone(Stone& stone) const override {
         if (stone.type == RockType::IGNEOUS) {
-            stone.friction = 0.15f; // Mengubah stat batu
+            stone.friction = 0.15f; 
         }
     }
 };
 
-// 2. Solidified Leaf (Buff Sedimentary rock)
 class SolidifiedLeaf : public IModifier {
 public:
     std::string getName() const override { return "Solidified Leaf"; }
@@ -23,12 +21,11 @@ public:
     
     void modifyStone(Stone& stone) const override {
         if (stone.type == RockType::SEDIMENTARY) {
-            stone.baseValue = 5.0f; // Mengubah stat batu
+            stone.baseValue = 5.0f; 
         }
     }
 };
 
-// 3. Floating Leaf (Buff Metamorphic rock)
 class FloatingLeaf : public IModifier {
 public:
     std::string getName() const override { return "Floating Leaf"; }
@@ -36,9 +33,8 @@ public:
     
     int modifyBounces(const Stone& stone, int currentBounces) const override {
         if (stone.type == RockType::METAMORPHIC) {
-            // Peluang 1 banding 10 (10%)
             if (std::rand() % 100 < 10) {
-                return currentBounces + 1; // Pantul sekali lagi!
+                return currentBounces + 1; 
             }
         }
         return currentBounces;

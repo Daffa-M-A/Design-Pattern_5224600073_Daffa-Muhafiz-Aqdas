@@ -10,7 +10,6 @@
 
 using namespace std;
 
-// Fungsi bantu untuk mengubah input teks ("1 2 3") menjadi vector index
 vector<int> parseInput(const string& input) {
     vector<int> indices;
     stringstream ss(input);
@@ -26,7 +25,6 @@ int main() {
     ScoringSystem scorer;
     ShopSystem shop;
     
-    // Inventory/Koleksi Leaf milik pemain yang akan terus dibawa antar ronde
     vector<unique_ptr<IModifier>> activeLeaves;
 
     cout << "===================================\n";
@@ -42,7 +40,6 @@ int main() {
 
         cout << "\n>>> ROUND " << round << " STARTS! <<<\n";
         
-        // Tampilkan Leaf apa saja yang sedang aktif
         if (!activeLeaves.empty()) {
             cout << "[Active Leaves]: ";
             for (const auto& leaf : activeLeaves) {
@@ -51,7 +48,6 @@ int main() {
             cout << "\n";
         }
 
-        // Loop per ronde
         while (session.getPlaysLeft() > 0 && currentScore < target) {
             cout << "\n-----------------------------------\n";
             cout << "Score: " << currentScore << " / " << target << "\n";
@@ -75,7 +71,6 @@ int main() {
                 if (indices.size() > 0 && indices.size() <= 3) {
                     vector<Stone> played = session.playStones(indices);
                     
-                    // Hitung skor dengan menyertakan activeLeaves
                     int scoreGained = scorer.calculatePlayScore(played, activeLeaves);
                     currentScore += scoreGained;
                     cout << "\n> You skipped stones and scored " << scoreGained << " points!\n";
@@ -101,26 +96,22 @@ int main() {
             }
         }
 
-        // Cek kondisi menang/kalah per ronde
         if (currentScore >= target) {
             cout << "\n*** ROUND " << round << " CLEARED! ***\n";
             
-            // Masuk Shop jika bukan ronde terakhir
             if (round < 3) {
                 auto newLeaf = shop.openShop();
                 if (newLeaf) {
                     
-                    // --- LOGIKA BARU: Batasan 1 Leaf ---
                     if (!activeLeaves.empty()) {
                         cout << "\n> You replaced [" << activeLeaves[0]->getName() 
                              << "] with [" << newLeaf->getName() << "]!\n";
-                        activeLeaves.clear(); // Hapus Leaf yang lama
+                        activeLeaves.clear();
                     } else {
                         cout << "\n> You acquired: [" << newLeaf->getName() << "]!\n";
                     }
                     
-                    activeLeaves.push_back(move(newLeaf)); // Masukkan Leaf yang baru
-                    // -----------------------------------
+                    activeLeaves.push_back(move(newLeaf));
                     
                 } else {
                     cout << "\n> You skipped the shop.\n";
@@ -128,7 +119,7 @@ int main() {
             }
         } else {
             cout << "\n*** GAME OVER! Target not reached. ***\n";
-            return 0; // Menghentikan program jika kalah
+            return 0; 
         }
     }
 

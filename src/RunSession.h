@@ -4,7 +4,7 @@
 
 class RunSession {
 private:
-    std::vector<Stone> can; // Deck
+    std::vector<Stone> can; 
     std::vector<Stone> hand;
     int playsLeft;
     int discardsLeft;
